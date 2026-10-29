@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPI Pendidikan Pancasila - Aku Anak Pancasila</title>
+<style>
+:root{--navy:#17365d;--blue:#2878b5;--yellow:#ffd166;--coral:#ff7f7f;--green:#57b894;--cream:#fffaf0;--ink:#243247}
+*{box-sizing:border-box}body{margin:0;font-family:"Trebuchet MS",Arial,sans-serif;background:linear-gradient(135deg,#eaf7ff,#fff7e4);color:var(--ink)}
+header{background:linear-gradient(120deg,#1c5791,#398dc5);color:white;padding:22px 16px;text-align:center;box-shadow:0 4px 14px #17365d22}
+header .badge{display:inline-block;background:#ffffff26;border:1px solid #ffffff55;border-radius:30px;padding:6px 12px;font-size:13px}
+h1{margin:10px 0 6px;font-size:clamp(25px,5vw,42px)}header p{margin:0;font-size:16px}
+.shell{max-width:1050px;margin:20px auto;padding:0 14px}
+nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+nav button,.btn{border:0;border-radius:14px;padding:11px 15px;font-weight:800;font-size:15px;cursor:pointer;background:white;color:var(--navy);box-shadow:0 3px 8px #17365d15}
+nav button.active,.btn.primary{background:var(--yellow);color:#533b00}
+nav button:hover,.btn:hover{transform:translateY(-1px)}
+.panel{background:white;border-radius:22px;padding:clamp(16px,3vw,28px);box-shadow:0 8px 24px #17365d12;margin-bottom:18px}
+.hero{text-align:center;background:linear-gradient(140deg,#fff1bf,#ffe2e7)}
+.hero .mascot{font-size:78px;line-height:1.2}
+h2{color:var(--navy);margin-top:0}h3{margin:8px 0;color:var(--navy)}
+p{line-height:1.6}.sub{color:#5c6d82}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.sila{border:2px solid #edf1f5;border-radius:18px;padding:16px;text-align:center;background:#fff}
+.symbol{font-size:60px;display:block;margin:8px}
+.sila:nth-child(1){background:#fff9e7}.sila:nth-child(2){background:#fff0f3}.sila:nth-child(3){background:#eaf8ef}.sila:nth-child(4){background:#edf6ff}.sila:nth-child(5){background:#f4efff}
+.sila button{margin-top:8px}
+.hidden{display:none!important}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+select{width:100%;padding:12px;border:2px solid #dce6ef;border-radius:12px;font-size:16px;background:#fff}
+.quizq{padding:15px;border-radius:15px;background:#f5f9ff;margin:12px 0}
+.options{display:grid;gap:8px}.options button{background:white;border:2px solid #dce6ef;border-radius:12px;padding:11px;text-align:left;font-size:16px;cursor:pointer}
+.options button.chosen{border-color:#2878b5;background:#e8f4ff}.options button.correct{background:#e5f8eb;border-color:#57b894}.options button.wrong{background:#fff0f0;border-color:#ff7f7f}
+.result{font-size:22px;font-weight:900;text-align:center;padding:15px;border-radius:14px;background:#fff1c7}
+footer{text-align:center;color:#61738a;font-size:13px;padding:12px}
+.small{font-size:13px}.backnext{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+button:focus-visible,select:focus-visible{outline:3px solid #f5a623;outline-offset:2px}
+@media(max-width:520px){nav button{flex:1 1 42%;font-size:14px}.symbol{font-size:52px}.panel{border-radius:17px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">MEDIA PEMBELAJARAN INTERAKTIF • KURIKULUM MERDEKA</div>
+  <h1>🌟 AKU ANAK PANCASILA 🌟</h1>
+  <p>Belajar Makna Sila dan Lambang Pancasila dengan Ceria!</p>
+</header>
+<div class="shell">
+<nav id="nav">
+<button class="active" data-page="home">🏠 Beranda</button>
+<button data-page="materi">📖 Materi</button>
+<button data-page="main">🧩 Ayo Bermain</button>
+<button data-page="kuis">⭐ Kuis</button>
+<button data-page="refleksi">💭 Refleksi</button>
+</nav>
+<section id="home" class="page panel hero">
+  <div class="mascot">🇮🇩 🦅 🇮🇩</div>
+  <h2>Halo, Anak Hebat!</h2>
+  <p>Yuk, kenali lima sila Pancasila, lambangnya, dan contoh sikap baik dalam kehidupan sehari-hari.</p>
+  <p><b>SD Negeri 7 Pakue Utara</b><br>Pendidikan Pancasila • Kelas I • Fase A • Tahun Pelajaran 2026–2027</p>
+  <button class="btn primary" onclick="showPage('materi')">Mulai Belajar ➜</button>
+</section>
+<section id="materi" class="page panel hidden">
+  <h2>📖 Mengenal Lima Sila Pancasila</h2>
+  <p class="sub">Tekan tombol “Pelajari” untuk melihat makna dan contoh perilakunya.</p>
+  <div class="grid" id="silagrid"></div>
+  <div id="detail" class="panel hidden" style="margin-top:16px;background:#f7fbff"></div>
+</section>
+<section id="main" class="page panel hidden">
+  <h2>🧩 Ayo Pasangkan!</h2>
+  <p>Pasangkan lambang Pancasila dengan bunyi sila yang tepat. Pilih jawaban untuk setiap lambang.</p>
+  <div id="matcharea"></div>
+  <button class="btn primary" onclick="checkMatch()">Periksa Pasangan</button>
+  <div id="matchresult" style="margin-top:12px"></div>
+</section>
+<section id="kuis" class="page panel hidden">
+  <h2>⭐ Kuis Pancasila</h2>
+  <p>Jawablah 5 pertanyaan berikut. Setiap jawaban benar mendapat 20 poin.</p>
+  <div id="quizarea"></div>
+  <button class="btn primary" onclick="submitQuiz()">Lihat Nilai</button>
+  <button class="btn" onclick="resetQuiz()">Ulangi Kuis</button>
+  <div id="quizresult" style="margin-top:14px"></div>
+</section>
+<section id="refleksi" class="page panel hidden">
+  <h2>💭 Refleksi Anak Pancasila</h2>
+  <p>Hari ini aku belajar untuk…</p>
+  <div class="grid">
+    <div class="sila">🙏 Berdoa dan menghormati agama lain</div>
+    <div class="sila">🤝 Menolong dan menyayangi teman</div>
+    <div class="sila">🌳 Hidup rukun dan bersatu</div>
+    <div class="sila">🐂 Mendengarkan pendapat teman</div>
+    <div class="sila">🌾 Bersikap adil dan mau berbagi</div>
+  </div>
+  <p style="text-align:center;font-size:20px"><b>“Pancasila di hatiku, kebaikan dalam perilakuku!”</b></p>
+  <div style="text-align:center"><button class="btn primary" onclick="showPage('home')">Kembali ke Beranda</button></div>
+</section>
+<footer>MPI Pendidikan Pancasila • Kelas I SD • SD Negeri 7 Pakue Utara</footer>
+</div>
+<script>
+const silaData=[
+{n:1,logo:"⭐",name:"Bintang",text:"Ketuhanan Yang Maha Esa",meaning:"Kita percaya kepada Tuhan Yang Maha Esa dan menghormati teman yang berbeda agama.",examples:["Berdoa sebelum belajar.","Menghormati teman yang sedang beribadah.","Tidak mengejek agama orang lain."]},
+{n:2,logo:"🔗",name:"Rantai",text:"Kemanusiaan yang Adil dan Beradab",meaning:"Kita menyayangi sesama, bersikap sopan, dan menolong orang lain.",examples:["Menolong teman yang jatuh.","Berbicara dengan sopan.","Tidak mengejek teman."]},
+{n:3,logo:"🌳",name:"Pohon Beringin",text:"Persatuan Indonesia",meaning:"Kita hidup rukun, bersatu, dan menyayangi teman meskipun berbeda.",examples:["Bermain bersama tanpa membeda-bedakan.","Bekerja sama membersihkan kelas.","Menjaga kerukunan."]},
+{n:4,logo:"🐂",name:"Kepala Banteng",text:"Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan",meaning:"Kita belajar bermusyawarah, mendengarkan pendapat, dan menerima keputusan bersama.",examples:["Memilih ketua kelas bersama.","Mendengarkan pendapat teman.","Tidak memaksakan kehendak."]},
+{n:5,logo:"🌾",name:"Padi dan Kapas",text:"Keadilan Sosial bagi Seluruh Rakyat Indonesia",meaning:"Kita bersikap adil, mau berbagi, dan menghargai hak orang lain.",examples:["Berbagi alat tulis.","Bergiliran menggunakan mainan.","Tidak pilih kasih."]}
+];
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function renderSila(){document.getElementById('silagrid').innerHTML=silaData.map((s,i)=>`<div class="sila"><span class="small">SILA KE-${s.n}</span><span class="symbol">${s.logo}</span><h3>${s.name}</h3><p>${s.text}</p><button class="btn" onclick="showDetail(${i})">Pelajari</button></div>`).join('')}
+function showDetail(i){const s=silaData[i],d=document.getElementById('detail');d.classList.remove('hidden');d.innerHTML=`<h3>${s.logo} Sila ke-${s.n}: ${s.name}</h3><b>${s.text}</b><p><b>Makna:</b> ${s.meaning}</p><b>Contoh perilaku:</b><ul>${s.examples.map(x=>`<li>${x}</li>`).join('')}</ul><button class="btn" onclick="document.getElementById('detail').classList.add('hidden')">Tutup</button>`;d.scrollIntoView({behavior:'smooth',block:'nearest'})}
+renderSila();
+const matchOpts=["Sila ke-1 • Ketuhanan Yang Maha Esa","Sila ke-2 • Kemanusiaan yang Adil dan Beradab","Sila ke-3 • Persatuan Indonesia","Sila ke-4 • Kerakyatan / Musyawarah","Sila ke-5 • Keadilan Sosial"];
+function renderMatch(){document.getElementById('matcharea').innerHTML=silaData.map((s,i)=>`<div class="quizq"><div class="row"><span style="font-size:36px">${s.logo}</span><b>${s.name}</b></div><select id="m${i}"><option value="">Pilih bunyi sila…</option>${matchOpts.map((o,j)=>`<option value="${j}">${o}</option>`).join('')}</select></div>`).join('')}
+function checkMatch(){let score=0;silaData.forEach((s,i)=>{if(document.getElementById('m'+i).value==i)score++});document.getElementById('matchresult').innerHTML=`<div class="result">${score}/5 pasangan benar ${score===5?'🎉 Hebat sekali!':'👏 Ayo coba lagi!'}</div>`}
+renderMatch();
+const qs=[
+{q:"Lambang sila pertama Pancasila adalah…",opts:["Bintang","Rantai","Padi dan kapas"],a:0},
+{q:"Menolong teman yang jatuh merupakan contoh sila…",opts:["Pertama","Kedua","Kelima"],a:1},
+{q:"Lambang sila ketiga adalah…",opts:["Kepala banteng","Pohon beringin","Bintang"],a:1},
+{q:"Saat memilih ketua kelas, kita sebaiknya…",opts:["Bermusyawarah","Memaksa","Bertengkar"],a:0},
+{q:"Bergiliran memakai mainan menunjukkan sikap…",opts:["Tidak adil","Adil","Egois"],a:1}
+];
+function renderQuiz(){document.getElementById('quizarea').innerHTML=qs.map((q,i)=>`<div class="quizq"><b>${i+1}. ${q.q}</b><div class="options">${q.opts.map((o,j)=>`<button id="q${i}o${j}" onclick="choose(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')}</div></div>`).join('')}
+function choose(i,j){qs[i].chosen=j;qs[i].opts.forEach((_,k)=>document.getElementById(`q${i}o${k}`).classList.toggle('chosen',j===k))}
+function submitQuiz(){let score=0;qs.forEach((q,i)=>{q.opts.forEach((_,j)=>{let b=document.getElementById(`q${i}o${j}`);b.classList.remove('correct','wrong');if(j===q.a)b.classList.add('correct');else if(j===q.chosen)b.classList.add('wrong')});if(q.chosen===q.a)score+=20});document.getElementById('quizresult').innerHTML=`<div class="result">Nilaimu: ${score}/100 ${score>=80?'🌟 Hebat!':score>=60?'👍 Bagus!':'💪 Terus belajar, ya!'}</div>`}
+function resetQuiz(){qs.forEach(q=>delete q.chosen);renderQuiz();document.getElementById('quizresult').innerHTML=''}
+renderQuiz();
+</script>
+</body>
+</html>
